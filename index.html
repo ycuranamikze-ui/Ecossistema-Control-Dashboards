@@ -79,14 +79,21 @@
   const canvas = document.getElementById('bgCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let w = innerWidth, h = innerHeight, t = 0;
 
   // ===============================
   // RESIZE
   // ===============================
-  function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
-  window.addEventListener('resize', resize);
-  resize();
+    let w, h, t = 0;
+
+    function resize() {
+      const cw = document.documentElement.clientWidth;
+      const ch = document.documentElement.clientHeight;
+
+      w = canvas.width = cw;
+      h = canvas.height = ch;
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
   // ===============================
   // UTILS
@@ -187,4 +194,5 @@
 
   </body>
 </html>
+
 
