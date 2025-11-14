@@ -44,7 +44,7 @@ body { opacity: 0; animation: pageFadeIn 0.65s ease forwards 0.06s; }
 #bgCanvas {
   position: fixed;
   inset: 0;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   z-index: -2;
   pointer-events: none;
@@ -611,3 +611,4 @@ a:focus, button:focus { outline: 3px solid rgba(142,182,155,0.18); outline-offse
     font-size: 0.85rem !important;
   }
 }
+
