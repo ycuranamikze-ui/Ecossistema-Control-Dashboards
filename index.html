@@ -1,198 +1,147 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="icon" type="image/x-icon" href="https://drive.google.com/file/d/11mAzbCAJnfrBLxB0wUkY0CNFiABMtDTO/view?usp=drive_link">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Dashboards | Quinto Andar</title>
     <link rel="stylesheet" href="style.css">
-    <title>Control Dashboards | Home</title>
-  </head>
-  <body>
-    <!-- NAVBAR dinâmica -->
+</head>
+<body>
+
+    <!-- NAVBAR -->
     <div id="navbar"></div>
 
-    <!-- background canvas and subtle overlay -->
-    <canvas id="bgCanvas" aria-hidden="true"></canvas>
-    <div class="bg-overlay" aria-hidden="true"></div>
+    <!-- CANVAS DOS EFEITOS -->
+    <canvas id="bgCanvas"></canvas>
 
-    <div class="content">
-      <h1>Bem-vindo ao Ecossistema<br>Control Dashboards</h1>
-      <p class="lead">
-        Aqui você encontra todos os acessos centralizados aos dashboards corporativos, indicadores e ferramentas
-        de análise para cada cliente.
-      </p>
+    <!-- CONTEÚDO DA PÁGINA -->
+    <main class="container">
+        <h1>Control Dashboards</h1>
+        <p>Quinto Andar | Curitiba - PR</p>
 
-      <div class="home-buttons" role="list">
-        <a role="listitem" href="https://concentrix.domo.com/auth/index?redirectUrl=%2Fapp-studio%2F688935992%2Fpages%2F1740210127" target="_blank" rel="noopener" class="home-btn" aria-label="Acessar DOMO">
-          <img src="https://img.icons8.com/?size=100&id=78770&format=png&color=FFFFFF" alt="">
-          DOMO ➤
-        </a>
+        <button id="scrollTopBtn">↑ Voltar ao topo</button>
 
-        <a role="listitem" href="https://dashboards.gruposervices.com.br/ragnamop/auth.html" target="_blank" rel="noopener" class="home-btn" aria-label="Acessar Ragna MOP">
-          <img src="https://img.icons8.com/?size=100&id=4221&format=png&color=FFFFFF" alt="">
-          Ragna MOP ➤
-        </a>
+        <section class="cards">
+            <div class="card">Dashboard 1</div>
+            <div class="card">Dashboard 2</div>
+            <div class="card">Dashboard 3</div>
+        </section>
+    </main>
 
-        <a role="listitem" href="https://dashboards.gruposervices.com.br/concentrix/auth.html" target="_blank" rel="noopener" class="home-btn" aria-label="Acessar ASGARD">
-          <img class="asgardimg" src="https://lh3.googleusercontent.com/d/1-zTVV-jfq6xUpW5z199iqHyMRm2-ArPe=w1920-h1080" alt="">
-          Asgard ➤
-        </a>
-      </div>
-    </div>
-
-    <!-- CARREGA NAVBAR + aplica JS interno -->
+    <!-- JAVASCRIPT -->
     <script>
-    (function(){
-      fetch('navbar.html')
-        .then(r => r.text())
-        .then(html => {
-          const container = document.getElementById('navbar');
-          container.innerHTML = html;
+        /* ---------------------------------------------------------
+           ⭐ EFEITO COMBINADO (Estrelas + Partículas Flutuantes)
+        ----------------------------------------------------------*/
 
-          // executa scripts embarcados no navbar.html
-          const scripts = Array.from(container.querySelectorAll('script'));
-          scripts.forEach(s => {
-            const ns = document.createElement('script');
-            if (s.src) ns.src = s.src;
-            else ns.textContent = s.textContent;
-            document.head.appendChild(ns);
-            s.remove();
-          });
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+        let stars = [];
+        let particles = [];
+        const STAR_COUNT = 120;
+        const PARTICLE_COUNT = 40;
 
-          // aplica efeito de scroll
-          window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (!nav) return;
-            if (window.scrollY > 10) {
-              nav.classList.add('scrolled');
-            } else {
-              nav.classList.remove('scrolled');
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        /* ---------------- ESTRELAS ---------------- */
+        class Star {
+            constructor() {
+                this.reset();
             }
-          });
-        })
-        .catch(err => console.error('Erro ao carregar navbar:', err));
-    })();
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.8;
+                this.speed = Math.random() * 0.5 + 0.2;
+                this.alpha = Math.random() * 0.8 + 0.2;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) this.reset();
+            }
+        }
+
+        /* ---------------- PARTÍCULAS ---------------- */
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 1;
+                this.speed = Math.random() * 0.6 + 0.2;
+                this.direction = Math.random() * 2 - 1;
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(100, 180, 255, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            update() {
+                this.y += this.speed;
+                this.x += this.direction;
+
+                if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
+                    this.reset();
+                }
+            }
+        }
+
+        /* ---------------- LOOP ---------------- */
+        function initEffects() {
+            for (let i = 0; i < STAR_COUNT; i++) stars.push(new Star());
+            for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(s => { s.update(); s.draw(); });
+            particles.forEach(p => { p.update(); p.draw(); });
+
+            requestAnimationFrame(animate);
+        }
+
+        initEffects();
+
+
+        /* ---------------------------------------------------------
+           🔝 BOTÃO VOLTAR AO TOPO
+        ----------------------------------------------------------*/
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        window.addEventListener("scroll", () => {
+            scrollTopBtn.style.display = window.scrollY > 200 ? "block" : "none";
+        });
+
+        scrollTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+
+        /* ---------------------------------------------------------
+           📌 NAVBAR DINÂMICA (include)
+        ----------------------------------------------------------*/
+        fetch("navbar.html")
+            .then(res => res.text())
+            .then(html => document.getElementById("navbar").innerHTML = html);
+
     </script>
 
-    <script>
-(function(){
-  const canvas = document.getElementById('bgCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-
-  // ===============================
-  // RESIZE
-  // ===============================
-    let w, h, t = 0;
-
-    function resize() {
-      const cw = document.documentElement.clientWidth;
-      const ch = document.documentElement.clientHeight;
-
-      w = canvas.width = cw;
-      h = canvas.height = ch;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-  // ===============================
-  // UTILS
-  // ===============================
-  function hexToRgba(hex, alpha) {
-    const h = hex.replace('#','');
-    const bigint = parseInt(h, 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return `rgba(${r},${g},${b},${alpha})`;
-  }
-
-  function getPalette() {
-    const cs = getComputedStyle(document.body);
-    return {
-      s: cs.getPropertyValue('--surface-alt').trim() || '#163832',
-      sa: cs.getPropertyValue('--accent').trim() || '#235347',
-      a: cs.getPropertyValue('--highlight').trim() || '#8eb69b',
-      hi: cs.getPropertyValue('--text').trim() || '#daf1de'
-    };
-  }
-
-  // ===============================
-  // STARS
-  // ===============================
-  const STAR_COUNT = 120;
-  const stars = [];
-  class Star {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.size = Math.random() * 2;
-      this.speed = 0.2 + Math.random() * 0.5;
-      this.alpha = 0.3 + Math.random() * 0.7;
-    }
-    update() {
-      this.y -= this.speed;
-      if (this.y < 0) this.reset();
-    }
-    draw() {
-      ctx.globalAlpha = this.alpha;
-      ctx.fillStyle = "#fff";
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-  }
-  for (let i=0;i<STAR_COUNT;i++) stars.push(new Star());
-
-  // ===============================
-  // WAVES
-  // ===============================
-  function drawWave(offset, amp, freq, color, speed) {
-    ctx.beginPath();
-    ctx.moveTo(0, h);
-    for (let x=0; x<=w; x+=12) {
-      const y = h*0.6 + Math.sin(x*freq + t*speed + offset)*amp + Math.cos(x*(freq*0.6)+t*speed*0.7)*(amp*0.4);
-      ctx.lineTo(x, y);
-    }
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
-
-  // ===============================
-  // ANIMATION
-  // ===============================
-  function animate() {
-    t += 0.018;
-    ctx.clearRect(0,0,w,h);
-    
-    const pal = getPalette();
-
-    // 1️⃣ Waves
-    drawWave(120, 44, 0.011, hexToRgba(pal.hi, 0.06), 1.0);
-    drawWave(20, 88, 0.009, hexToRgba(pal.a, 0.055), 0.75);
-    drawWave(-60, 140, 0.007, hexToRgba(pal.sa, 0.05), 0.6);
-
-    // 2️⃣ Stars
-    stars.forEach(star => { star.update(); star.draw(); });
-
-    requestAnimationFrame(animate);
-  }
-
-  // start animation
-  animate();
-
-  // re-read palette on theme change
-  new MutationObserver(()=>{}).observe(document.body, { attributes:true, attributeFilter:['class'] });
-
-})();
-</script>
-
-
-  </body>
+</body>
 </html>
-
-
