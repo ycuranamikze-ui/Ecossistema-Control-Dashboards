@@ -360,6 +360,18 @@ p.lead, .content p {
   transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
 }
 
+.card iframe {
+  width: 460px;
+  max-width: 46%;
+  min-width: 300px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+}
+
 .card img:hover {
   transform: scale(1.03);
   box-shadow: 0 10px 36px rgba(0, 0, 0, 0.6);
@@ -618,6 +630,7 @@ a:focus, button:focus { outline: 3px solid rgba(142,182,155,0.18); outline-offse
     font-size: 0.85rem !important;
   }
 }
+
 
 
 
